@@ -19,9 +19,11 @@ pipeline {
       }
     }
     stage('Linting') {
-      def scannerHome = tool 'Sonarqube';
-      withSonarQubeEnv() {
-        sh "${scannerHome}/bin/sonar-scanner"
+      steps {
+        def scannerHome = tool 'Sonarqube';
+        withSonarQubeEnv() {
+          sh "${scannerHome}/bin/sonar-scanner"
+        }
       }
     }
   }
