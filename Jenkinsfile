@@ -14,7 +14,9 @@ pipeline {
 
   stages {
     stage('SCM') {
-      checkout scm
+      steps {
+        checkout scm
+      }
     }
     stage('Linting') {
       def scannerHome = tool 'Sonarqube';
