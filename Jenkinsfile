@@ -20,10 +20,13 @@ pipeline {
     }
     stage('Linting') {
       steps {
-        def scannerHome = tool 'Sonarqube';
-        withSonarQubeEnv() {
-          sh "${scannerHome}/bin/sonar-scanner"
+        script {
+          def scannerHome = tool 'Sonarqube';
+          withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
         }
+        
       }
     }
   }
