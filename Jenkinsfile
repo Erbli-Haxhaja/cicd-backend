@@ -38,15 +38,16 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          echo 'Building Docker Image'
-          app = docker.build("erbli/test")
+          app = docker.build("cicd/test")
         }
       }
     }
     stage('Push Docker Image') {
       steps {
         script {
-          echo 'Pushing Docker Image to Docker Hub'
+          docker.withRegistry('https://registry.hub.docker.com', 'docker_hub') {            
+          app.push("${env.BUILD_NUMBER}")            
+          app.push("latest")   
         }
       }
     }
