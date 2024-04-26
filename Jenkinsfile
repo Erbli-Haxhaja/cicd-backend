@@ -11,7 +11,7 @@ pipeline {
   environment {
     NODE_ENV="production"
     dockerImage = ''
-    registry = 'eeba19/cicd'
+    registry = 'eeba19/cicd-backend'
   }
 
   stages {
@@ -52,6 +52,13 @@ pipeline {
             dockerImage.push("${env.BUILD_NUMBER}")            
             dockerImage.push("latest")   
           }
+        }
+      }
+    }
+    stage('Deploy App') {
+      steps {
+        script {
+          echo "Deploying app..."
         }
       }
     }
