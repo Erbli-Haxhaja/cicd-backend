@@ -50,7 +50,7 @@ pipeline {
         script {
           docker.withRegistry('https://registry.hub.docker.com', 'docker_hub') {            
             dockerImage.push("${env.BUILD_NUMBER}")            
-            apdockerImagep.push("latest")   
+            dockerImage.push("latest")   
           }
         }
       }
