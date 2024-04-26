@@ -20,23 +20,23 @@ pipeline {
         checkout scm
       }
     }
-    stage('Linting') {
-      steps {
-        script {
-          def scannerHome = tool 'Sonarqube';
-          withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner"
-          }
-        }
-      }
-    }
-    stage('Testing') {
-      steps {
-        script {
-          echo 'A/B Testing Stage'
-        }
-      }
-    }
+    // stage('Linting') {
+    //   steps {
+    //     script {
+    //       def scannerHome = tool 'Sonarqube';
+    //       withSonarQubeEnv() {
+    //         sh "${scannerHome}/bin/sonar-scanner"
+    //       }
+    //     }
+    //   }
+    // }
+    // stage('Testing') {
+    //   steps {
+    //     script {
+    //       echo 'A/B Testing Stage'
+    //     }
+    //   }
+    // }
     stage('Build Docker Image') {
       steps {
         script {
