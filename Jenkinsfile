@@ -26,7 +26,27 @@ pipeline {
             sh "${scannerHome}/bin/sonar-scanner"
           }
         }
-        
+      }
+    }
+    stage('Testing') {
+      steps {
+        script {
+          echo 'A/B Testing Stage'
+        }
+      }
+    }
+    stage('Build Docker Image') {
+      steps {
+        script {
+          echo 'Building Docker Image'
+        }
+      }
+    }
+    stage('Push Docker Image') {
+      steps {
+        script {
+          echo 'Pushing Docker Image to Docker Hub'
+        }
       }
     }
   }
