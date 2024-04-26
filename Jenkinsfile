@@ -11,7 +11,7 @@ pipeline {
   environment {
     NODE_ENV="production"
     dockerImage = ''
-    registry = 'eeba19/test'
+    registry = 'eeba19/cicd'
   }
 
   stages {
