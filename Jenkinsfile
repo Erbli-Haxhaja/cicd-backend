@@ -10,6 +10,8 @@ pipeline {
 
   environment {
     NODE_ENV="production"
+    dockerImage = ''
+    registry = 'eeba19/test'
   }
 
   stages {
@@ -38,7 +40,8 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          app = docker.build("cicd/test")
+          //app = docker.build("cicd/test")
+          dockerImage = docker.build registry
         }
       }
     }
