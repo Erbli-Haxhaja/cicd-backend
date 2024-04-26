@@ -39,6 +39,7 @@ pipeline {
       steps {
         script {
           echo 'Building Docker Image'
+          app = docker.build("erbli/test")
         }
       }
     }
