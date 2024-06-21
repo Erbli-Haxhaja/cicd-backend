@@ -17,13 +17,7 @@ pipeline {
   stages {
     stage('Test Email') {
       steps {
-        script {
-          emailext (
-            subject: "Test Email",
-            body: "This is a test email from Jenkins pipeline.",
-            to: "eeba.haxhaja@gmail.com"
-          )
-        }
+        mail bcc: '', body: 'Hello, This is an email from jenkins pipeline.', cc: '', from: '', replyTo: '', subject:​​ 'EmailJenkinsPipeline', to: 'eeba.haxhaja@gmail.com'
       }
     }
 
