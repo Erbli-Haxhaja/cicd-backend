@@ -15,10 +15,11 @@ pipeline {
   }
 
   stages {
-    stage('Test Email') {
+    stage('Email Jenkins Pipeline') {
       steps {
-        mail bcc: '', body: 'Hello, This is an email from jenkins pipeline.', cc: '', from: '', replyTo: '', subject:​​ 'EmailJenkinsPipeline', to: 'eeba.haxhaja@gmail.com'
+        mail bcc: '', body: 'Hello, This is an email from jenkins pipeline.', cc: '', from: '', replyTo: '', subject:​​ 'EmailJenkinsPipeline', to: 'sskg12035@gmail.com'
       }
+    }
     }
 
     // stage('SCM') {
@@ -69,4 +70,3 @@ pipeline {
     //   }
     // }
   }
-}
