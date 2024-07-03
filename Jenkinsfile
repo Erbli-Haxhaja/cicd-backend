@@ -23,7 +23,7 @@ pipeline {
   }
   post {
     always {
-        mail bcc: '', body: 'Hello, This is an email from jenkins pipeline.', cc: '', from: 'eri.kruja@gmail.com', replyTo: 'eri.kruja@gmail.com', subject:​​ 'EmailJenkinsPipeline', to: 'eeba.haxhaja@gmail.com'
+        emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Jenkins Test Email'
     }
   }
 
