@@ -15,12 +15,17 @@ pipeline {
   }
 
   stages {
-    stage('Email Jenkins Pipeline') {
-      steps {
-        mail bcc: '', body: 'Hello, This is an email from jenkins pipeline.', cc: '', from: '', replyTo: '', subject:​​ 'EmailJenkinsPipeline', to: 'sskg12035@gmail.com'
-      }
+    stage('Ok') {
+        steps {
+            echo "Ok"
+        }
     }
+  }
+  post {
+    always {
+        emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
     }
+  }
 
     // stage('SCM') {
     //   steps {
