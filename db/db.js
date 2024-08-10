@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
-const connUrl = 'postgres://postgres:postgres@localhost:5432/postgres';
-console.log('Database connection URL:', connUrl); // Debugging line
+const connUrl = 'postgres://postgres:eeeeeeee@localhost:5432/postgres';
+console.log('Database connection URL:', connUrl);
 
 const db = new Sequelize(connUrl);
 

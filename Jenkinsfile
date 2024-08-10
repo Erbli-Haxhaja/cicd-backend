@@ -13,65 +13,101 @@ pipeline {
     dockerImage = ''
     registry = 'eeba19/cicd-backend'
   }
-
   stages {
-    stage('Ok') {
-        steps {
-            echo "Ok"
+    stage('SCM') {
+      steps {
+        checkout scm
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('SCM')
+          }
         }
+      }
+    }
+    stage('Linting') {
+      steps {
+        script {
+          def scannerHome = tool 'Sonarqube';
+          withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
+        }
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('Linting')
+          }
+        }
+      }
+    }
+    stage('Testing') {
+      steps {
+        script {
+          echo 'Testing Stage'
+        }
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('Testing')
+          }
+        }
+      }
+    }
+    stage('Build Docker Image') {
+      steps {
+        script {
+          //app = docker.build("cicd/test")
+          dockerImage = docker.build registry
+        }
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('Build Docker Image')
+          }
+        }
+      }
+    }
+    stage('Push Docker Image') {
+      steps {
+        script {
+          docker.withRegistry('https://registry.hub.docker.com', 'docker_hub') {            
+            dockerImage.push("${env.BUILD_NUMBER}")            
+            dockerImage.push("latest")   
+          }
+        }
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('Push Docker image')
+          }
+        }
+      }
+    }
+    stage('Deploy App') {
+      steps {
+        script {
+          echo "Deploying app..."
+        }
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('Deploy App')
+          }
+        }
+      }
     }
   }
-  post {
-    always {
-        emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
-    }
   }
 
-    // stage('SCM') {
-    //   steps {
-    //     checkout scm
-    //   }
-    // }
-    // stage('Linting') {
-    //   steps {
-    //     script {
-    //       def scannerHome = tool 'Sonarqube';
-    //       withSonarQubeEnv() {
-    //         sh "${scannerHome}/bin/sonar-scanner"
-    //       }
-    //     }
-    //   }
-    // }
-    // stage('Testing') {
-    //   steps {
-    //     script {
-    //       echo 'A/B Testing Stage'
-    //     }
-    //   }
-    // }
-    // stage('Build Docker Image') {
-    //   steps {
-    //     script {
-    //       //app = docker.build("cicd/test")
-    //       dockerImage = docker.build registry
-    //     }
-    //   }
-    // }
-    // stage('Push Docker Image') {
-    //   steps {
-    //     script {
-    //       docker.withRegistry('https://registry.hub.docker.com', 'docker_hub') {            
-    //         dockerImage.push("${env.BUILD_NUMBER}")            
-    //         dockerImage.push("latest")   
-    //       }
-    //     }
-    //   }
-    // }
-    // stage('Deploy App') {
-    //   steps {
-    //     script {
-    //       echo "Deploying app..."
-    //     }
-    //   }
-    // }
-  }
+def sendFailureEmail(String stageName) {
+  emailext body: "The '${stageName}' stage in the Jenkins pipeline has failed. Please check the details.",
+          recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+          subject: "Pipeline Failure: ${stageName} Stage"
+}
