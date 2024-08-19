@@ -10,9 +10,9 @@ var usersRouter = require('./routes/users');  // Import the users route
 
 var app = express();
 app.use(cors({
-  origin: 'http://localhost:5173',  // replace with your frontend origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
+  origin: 'http://localhost:5175', // Allow requests from this origin
+  methods: 'GET,POST,PUT,DELETE',  // Allow these methods
+  credentials: true                // Allow cookies and other credentials to be sent
 }));
 
 
