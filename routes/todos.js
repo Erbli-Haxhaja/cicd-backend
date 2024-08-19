@@ -1,7 +1,6 @@
 const { body, validationResult } = require('express-validator');
 
 const db = require('../db/db');
-
 var express = require('express')
 var router = express.Router();
 
