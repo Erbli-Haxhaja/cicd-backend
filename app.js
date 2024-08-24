@@ -6,11 +6,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var todosRouter = require('./routes/todos');
-var usersRouter = require('./routes/users');  // Import the users route
+var usersRouter = require('./routes/users'); 
 
 var app = express();
 app.use(cors({
-  origin: 'http://localhost:5175', // Allow requests from this origin
+  origin: 'http://localhost:5173', // Allow requests from this origin
   methods: 'GET,POST,PUT,DELETE',  // Allow these methods
   credentials: true                // Allow cookies and other credentials to be sent
 }));
@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/todos', todosRouter);
-app.use('/users', usersRouter);  // Use the users route
+app.use('/users', usersRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
