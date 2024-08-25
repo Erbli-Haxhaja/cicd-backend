@@ -43,6 +43,25 @@ pipeline {
         }
       }
     }
+    stage('Static Code Analysis - Snyk') {
+      steps {
+        script {
+          // withCredentials([string(credentialsId: 'SNYK_TOKEN', variable: 'SNYK_TOKEN')])
+          snykSecurity(
+            snykInstallation: 'snyk@latest',
+            snykTokenId: 'SNYK_TOKEN',
+            // place other parameters here
+          )
+        }
+      }
+      post {
+        failure {
+          script {
+            sendFailureEmail('Static Code Analysis - Snyk')
+          }
+        }
+      }
+    }
     stage('Testing') {
       steps {
         script {
