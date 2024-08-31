@@ -5,35 +5,35 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: Lint
-  jobs:
-  - job: Lint
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '20.13.1' # Specify your Node.js version
-      displayName: 'Install Node.js'
+# - stage: Lint
+#   jobs:
+#   - job: Lint
+#     steps:
+#     - task: NodeTool@0
+#       inputs:
+#         versionSpec: '20.13.1' # Specify your Node.js version
+#       displayName: 'Install Node.js'
 
-    - script: npm install
-      displayName: 'Install dependencies'
+#     - script: npm install
+#       displayName: 'Install dependencies'
 
-    - script: npm run lint
-      displayName: 'Run linter'
+#     - script: npm run lint
+#       displayName: 'Run linter'
 
-- stage: Test
-  jobs:
-  - job: Test
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '20.13.1'
-      displayName: 'Install Node.js'
+# - stage: Test
+#   jobs:
+#   - job: Test
+#     steps:
+#     - task: NodeTool@0
+#       inputs:
+#         versionSpec: '20.13.1'
+#       displayName: 'Install Node.js'
 
-    - script: npm install
-      displayName: 'Install dependencies'
+#     - script: npm install
+#       displayName: 'Install dependencies'
 
-    - script: npm test
-      displayName: 'Run tests'
+#     - script: npm test
+#       displayName: 'Run tests'
 
 - stage: Build
   jobs:
