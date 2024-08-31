@@ -62,5 +62,5 @@ stages:
         command: push
         repository: 'eeba19/cicd-backend'
         tags: |
-          $(dockerRegistry)/cicd-backend:$(Build.BuildId)
+          $(Build.BuildId)
       displayName: 'Push Docker image to registry'
