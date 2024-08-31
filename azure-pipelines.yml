@@ -54,7 +54,7 @@ stages:
     - task: Docker@2
       inputs:
         command: login
-        containerRegistry: 'dockerRegistryConnection' # Azure DevOps Service Connection for Docker Registry
+        containerRegistry: 'dockerRegistryConnection'
         displayName: 'Login to Docker Registry'
 
     - task: Docker@2
