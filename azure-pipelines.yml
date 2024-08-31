@@ -44,7 +44,7 @@ stages:
         command: build
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
-          $(Build.BuildId)
+          $(dockerRegistry)/cicd-backend:$(Build.BuildId)
       displayName: 'Build Docker image'
 
 - stage: Push
@@ -62,5 +62,5 @@ stages:
         command: push
         repository: 'eeba19/cicd-backend'
         tags: |
-          $(Build.BuildId)
+          $(dockerRegistry)/cicd-backend:$(Build.BuildId)
       displayName: 'Push Docker image to registry'
