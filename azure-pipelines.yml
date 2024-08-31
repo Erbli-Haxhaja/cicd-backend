@@ -1,69 +1,41 @@
 trigger:
-- main # Or the branch you want to trigger the pipeline
+- main  # Or the branch you want to trigger the pipeline
 
 pool:
-  name: 'default'
+  vmImage: 'ubuntu-latest'
 
 variables:
-  dockerRegistry: 'docker.io/eeba19'
+  NODE_ENV: 'production'
+  dockerRegistry: 'docker.io/eeba19'  # Replace with your Docker registry
+  dockerImageName: 'cicd-backend'
+  dockerHubServiceConnection: 'dockerRegistryConnection'  # Your Docker Hub service connection in Azure DevOps
 
 stages:
-# - stage: Lint
-#   jobs:
-#   - job: Lint
-#     steps:
-#     - task: NodeTool@0
-#       inputs:
-#         versionSpec: '20.13.1' # Specify your Node.js version
-#       displayName: 'Install Node.js'
-
-#     - script: npm install
-#       displayName: 'Install dependencies'
-
-#     - script: npm run lint
-#       displayName: 'Run linter'
-
-# - stage: Test
-#   jobs:
-#   - job: Test
-#     steps:
-#     - task: NodeTool@0
-#       inputs:
-#         versionSpec: '20.13.1'
-#       displayName: 'Install Node.js'
-
-#     - script: npm install
-#       displayName: 'Install dependencies'
-
-#     - script: npm test
-#       displayName: 'Run tests' 
-
-- stage: Build
+- stage: BuildAndPush
   jobs:
   - job: BuildDockerImage
     steps:
+    - checkout: self  # Checkout the code from the SCM (GitHub repository)
+
     - task: Docker@2
       inputs:
         command: build
         Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
-          $(dockerRegistry)/cicd-backend:$(Build.BuildId)
-      displayName: 'Build Docker image'
+          $(dockerRegistry)/$(dockerImageName):$(Build.BuildId)
+      displayName: 'Build Docker Image'
 
-- stage: Push
-  jobs:
-  - job: PushDockerImage
-    steps:
     - task: Docker@2
       inputs:
         command: login
-        containerRegistry: 'dockerRegistryConnection'
+        containerRegistry: '$(dockerHubServiceConnection)'
         displayName: 'Login to Docker Registry'
 
     - task: Docker@2
       inputs:
         command: push
-        repository: 'eeba19/cicd-backend'
+        repository: '$(dockerRegistry)/$(dockerImageName)'
         tags: |
           $(Build.BuildId)
-      displayName: 'Push Docker image to registry'
+          latest
+      displayName: 'Push Docker Image to Registry'
