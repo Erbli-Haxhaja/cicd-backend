@@ -2,7 +2,7 @@ trigger:
 - main # Or the branch you want to trigger the pipeline
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'default'
 
 stages:
 # - stage: Lint
