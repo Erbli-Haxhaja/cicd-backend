@@ -4,6 +4,9 @@ trigger:
 pool:
   name: 'default'
 
+variables:
+  dockerRegistry: 'docker.io/eeba19'
+
 stages:
 # - stage: Lint
 #   jobs:
