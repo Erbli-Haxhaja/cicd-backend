@@ -1,36 +1,66 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
-- main
+- main # Or the branch you want to trigger the pipeline
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.13.1'
-  displayName: 'Install Node.js'
+stages:
+- stage: Lint
+  jobs:
+  - job: Lint
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.13.1' # Specify your Node.js version
+      displayName: 'Install Node.js'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'dockerRegistryConnection'
-    repository: 'cicd-backend'
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-  displayName: 'Build Docker Image'
+    - script: npm install
+      displayName: 'Install dependencies'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'dockerRegistryConnection'
-    repository: 'cicd-backend'
-    command: 'push'
-  displayName: 'Push Docker Image'
+    - script: npm run lint
+      displayName: 'Run linter'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+- stage: Test
+  jobs:
+  - job: Test
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.13.1'
+      displayName: 'Install Node.js'
+
+    - script: npm install
+      displayName: 'Install dependencies'
+
+    - script: npm test
+      displayName: 'Run tests'
+
+- stage: Build
+  jobs:
+  - job: BuildDockerImage
+    steps:
+    - task: Docker@2
+      inputs:
+        command: build
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(Build.BuildId)
+      displayName: 'Build Docker image'
+
+- stage: Push
+  jobs:
+  - job: PushDockerImage
+    steps:
+    - task: Docker@2
+      inputs:
+        command: login
+        containerRegistry: 'dockerRegistryConnection' # Azure DevOps Service Connection for Docker Registry
+        displayName: 'Login to Docker Registry'
+
+    - task: Docker@2
+      inputs:
+        command: push
+        repository: 'eeba19/cicd-backend'
+        tags: |
+          $(Build.BuildId)
+      displayName: 'Push Docker image to registry'
